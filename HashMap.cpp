@@ -58,3 +58,11 @@ Node* HashMap::find(int num){
     }
     return array[i].data;
 }
+HashMap::~HashMap() {
+    for (int i = 0; i < size; ++i) {
+        if (array[i].data != nullptr) {
+            delete array[i].data;
+        }
+    }
+    delete[] array;
+}
