@@ -2,9 +2,6 @@
 #include "HashMap.h"
 #include <stdexcept>
 #include <iostream>
-#include <exception>
-
-class MyFailure : public std::exception{}
 
 Node* HashMap::insert(int num){
     if(this->numObjects == this-> size){

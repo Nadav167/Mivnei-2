@@ -1,5 +1,7 @@
 #pragma once
 #include "Node.h"
+#include <exception>
+
 
 class HashMap {
     struct object{
@@ -27,7 +29,12 @@ class HashMap {
         int getSize();
         int getNumObjects();
 };
-
+class MyFailure : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "MyFailure";
+    }
+};
 
 
 
