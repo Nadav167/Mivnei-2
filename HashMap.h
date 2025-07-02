@@ -8,7 +8,7 @@ class HashMap {
         int key;
         int genreSize;
         Node* data;
-        object(): key(0), data(nullptr), genreSize(0){}
+        object() : key(0), genreSize(0), data(nullptr) {}
 
     };
     private:

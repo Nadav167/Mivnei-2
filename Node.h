@@ -7,7 +7,7 @@ class Node {
         int genreChanges;
 
     public:
-        explicit Node(int id) : id(id), parent(nullptr),genreChanges(0){}
+    	explicit Node(int id) : parent(nullptr), id(id), genreChanges(0) {}
         ~Node() = default;
         Node* getParent() const;
         int getGenreChanges() const;
