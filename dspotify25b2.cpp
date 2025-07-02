@@ -120,7 +120,7 @@ output_t<int> DSpotify::getNumberOfSongsByGenre(int genreId){
 
 output_t<int> DSpotify::getNumberOfGenreChanges(int songId){
     try {
-        if(genreId<=0) return StatusType::INVALID_INPUT;
+        if(songId<=0) return StatusType::INVALID_INPUT;
         return songs.find(songId)->getGenreChanges();
     }
     catch (const std::bad_alloc&){
