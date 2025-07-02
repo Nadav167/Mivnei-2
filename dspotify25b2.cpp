@@ -61,6 +61,9 @@ StatusType DSpotify::mergeGenres(int genreId1, int genreId2, int genreId3){
         Node* temp1 = genres.find(genreId1);
         Node* temp2 = genres.find(genreId2);
         Node* temp3 = genres.insert(genreId3);
+        if (!temp1->getParent() || !temp2->getParent()) {
+            return StatusType::FAILURE;
+        }
         temp1->getParent()->setParent(temp2->getParent());
         temp2->getParent()->setParent(temp3);
         temp3->setParent(temp2->getParent());
@@ -83,12 +86,13 @@ output_t<int> DSpotify::getSongGenre(int songId){
     try {
         if(songId<=0) return StatusType::INVALID_INPUT;
         Node* temp = songs.find(songId);
+        if (!temp->getParent()) return StatusType::FAILURE;
         Node* temp2 = temp;
         Node* temp3 = temp;
         while(temp->getParent()->getParent() != temp){
             temp = temp->getParent();
         }
-        while(temp2->getParent() != temp){
+        while(temp2->getParent() && temp2->getParent() != temp){
             temp3 = temp2->getParent();
             temp2->setParent(temp);
             temp2 = temp3;
