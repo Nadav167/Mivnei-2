@@ -1,9 +1,6 @@
-
 #include "HashMap.h"
-#include <stdexcept>
-#include <iostream>
 
-Node* HashMap::insert(int num){
+Node* HashMap::insert(int num, Node* temp){
     if(this->numObjects == this-> size){
         this->reHash();
     }
@@ -15,10 +12,16 @@ Node* HashMap::insert(int num){
         i = (i+1) % this-> size;
     }
     array[i].key = num;
-    array[i].data = new Node(num);
+    if(temp != nullptr){
+        array[i].data = temp;
+    }
+    else{
+        array[i].data = new Node(num);
+    }
     this->numObjects++;
     return array[i].data;
 }
+
 
 int HashMap::hash(int num){
     return num % this->size;
@@ -31,8 +34,9 @@ void HashMap::reHash(){
     this->array = new object[this->size];
     this->numObjects = 0;
     for(int i = 0; i < tempSize; i++){
-        this->insert(tempArray[i].key);
+       this->insert(tempArray[i].key, tempArray[i].data);
     }
+
     delete[] tempArray;
 }
 

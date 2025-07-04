@@ -14,12 +14,14 @@
 #define DSPOTIFY25SPRING_WET2_H_
 
 #include "wet2util.h"
-#include "hashMap.h"
+#include "HashMap.h"
 
 class DSpotify {
 private:
     HashMap songs;
     HashMap genres;
+
+    Node* update(int songId);
     
 public:
     // <DO-NOT-MODIFY> {

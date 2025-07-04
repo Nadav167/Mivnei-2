@@ -1,12 +1,10 @@
-// You can edit anything you want in this file.
-// However you need to implement all public DSpotify function, as provided below as a template
 
 #include "dspotify25b2.h"
-#include <ostream>
 #include <iostream>
-#include "dspotify25b2.h"
 #include "wet2util.h"
-#include <memory>
+#include "HashMap.h"
+#include "Node.h"
+
 
 DSpotify::DSpotify(){
 
@@ -42,6 +40,7 @@ StatusType DSpotify::addSong(int songId, int genreId){
         }
         else{
             temp2->setParent(temp1->getParent());
+            temp2->setGenreChanges(0 - temp2->getParent()->getGenreChanges());
         }
         temp1->updateGenreChange();
     }
@@ -61,17 +60,35 @@ StatusType DSpotify::mergeGenres(int genreId1, int genreId2, int genreId3){
         Node* temp1 = genres.find(genreId1);
         Node* temp2 = genres.find(genreId2);
         Node* temp3 = genres.insert(genreId3);
-        if (!temp1->getParent() || !temp2->getParent()) {
-            return StatusType::FAILURE;
+        if(!temp1->getParent() || !temp2->getParent()) {
+            if(temp1->getParent() && !temp2->getParent()) {
+                temp1->getParent()->setParent(temp3);
+                temp3->setParent(temp1->getParent());
+                temp1->setParent(nullptr);
+                temp3->setGenreChanges(temp1->getGenreChanges());
+                temp1->setGenreChanges(0);
+            }
+            if(!temp1->getParent() && temp2->getParent()) {
+                temp2->getParent()->setParent(temp3);
+                temp3->setParent(temp2->getParent());
+                temp2->setParent(nullptr);
+                temp3->setGenreChanges(temp2->getGenreChanges());
+                temp2->setGenreChanges(0);
+            }
         }
-        temp1->getParent()->setParent(temp2->getParent());
-        temp2->getParent()->setParent(temp3);
-        temp3->setParent(temp2->getParent());
-        temp3->setGenreChanges(temp1->getGenreChanges() + temp2->getGenreChanges());
-        temp1->setParent(nullptr);
-        temp2->setParent(nullptr);
-        temp1->setGenreChanges(0);
-        temp2->setGenreChanges(0);
+        else {
+            temp1->getParent()->setParent(temp2->getParent());
+            temp1->getParent()->setGenreChanges(temp1->getParent()->getGenreChanges() - temp2->getParent()->getGenreChanges());
+            temp2->getParent()->setParent(temp3);
+            temp3->setParent(temp2->getParent());
+            temp3->setGenreChanges(temp1->getGenreChanges() + temp2->getGenreChanges());
+            temp1->setParent(nullptr);
+            temp2->setParent(nullptr);
+            temp1->setGenreChanges(0);
+            temp2->setGenreChanges(0);
+
+        }
+        if(temp3->getGenreChanges() != 0) temp3->getParent()->updateGenreChange();
     }
     catch (const std::bad_alloc&){
         return StatusType::ALLOCATION_ERROR;
@@ -85,19 +102,11 @@ StatusType DSpotify::mergeGenres(int genreId1, int genreId2, int genreId3){
 output_t<int> DSpotify::getSongGenre(int songId){
     try {
         if(songId<=0) return StatusType::INVALID_INPUT;
-        Node* temp = songs.find(songId);
-        if (!temp->getParent()) return StatusType::FAILURE;
-        Node* temp2 = temp;
-        Node* temp3 = temp;
-        while(temp->getParent()->getParent() != temp){
-            temp = temp->getParent();
+        Node* temp = update(songId);
+        if(temp->getParent()->getParent() == temp) {
+            return temp->getParent()->getId();
         }
-        while(temp2->getParent() && temp2->getParent() != temp){
-            temp3 = temp2->getParent();
-            temp2->setParent(temp);
-            temp2 = temp3;
-        }
-        return temp->getParent()->getId();
+        return temp->getParent()->getParent()->getId();
     }
     catch (const std::bad_alloc&){
         return StatusType::ALLOCATION_ERROR;
@@ -105,7 +114,7 @@ output_t<int> DSpotify::getSongGenre(int songId){
     catch (const MyFailure&){
         return StatusType::FAILURE;
     }
-    return StatusType::SUCCESS;
+
 }
 
 output_t<int> DSpotify::getNumberOfSongsByGenre(int genreId){
@@ -119,13 +128,16 @@ output_t<int> DSpotify::getNumberOfSongsByGenre(int genreId){
     catch (const MyFailure&){
         return StatusType::FAILURE;
     }
-    return StatusType::SUCCESS;
 }
 
 output_t<int> DSpotify::getNumberOfGenreChanges(int songId){
     try {
         if(songId<=0) return StatusType::INVALID_INPUT;
-        return songs.find(songId)->getGenreChanges();
+        Node* temp = update(songId);
+        if(temp->getParent()->getParent() == temp) {
+            return temp->getGenreChanges() + 1;
+        }
+        return temp->getGenreChanges() + temp->getParent()->getGenreChanges() + 1;
     }
     catch (const std::bad_alloc&){
         return StatusType::ALLOCATION_ERROR;
@@ -133,5 +145,23 @@ output_t<int> DSpotify::getNumberOfGenreChanges(int songId){
     catch (const MyFailure&){
         return StatusType::FAILURE;
     }
-    return StatusType::SUCCESS;
+}
+
+Node* DSpotify::update(int songId) {
+    int sum = 0;
+    Node* temp = songs.find(songId);
+    Node* temp2 = temp;
+    while(temp->getParent()->getParent() != temp){
+        sum += temp->getGenreChanges();
+        temp = temp->getParent();
+    }
+    while(temp2 != temp && temp2->getParent() != temp){
+        int tempSum = temp2->getGenreChanges();
+        Node* temp3 = temp2->getParent();
+        temp2->setGenreChanges(sum);
+        sum -= tempSum;
+        temp2->setParent(temp);
+        temp2 = temp3;
+    }
+    return songs.find(songId);
 }

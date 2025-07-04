@@ -1,9 +1,8 @@
 #pragma once
-#include <memory>
 
 class Node {
-        Node* parent;
         int id;
+        Node* parent;
         int genreChanges;
 
     public:

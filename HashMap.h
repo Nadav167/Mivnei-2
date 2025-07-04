@@ -2,13 +2,14 @@
 #include "Node.h"
 #include <exception>
 
+class MyFailure : public std::exception {};
 
 class HashMap {
     struct object{
         int key;
-        int genreSize;
         Node* data;
-        object() : key(0), genreSize(0), data(nullptr) {}
+        int genreSize;
+        object(): key(0), data(nullptr), genreSize(0){}
 
     };
     private:
@@ -24,17 +25,12 @@ class HashMap {
             this->array = new object[size];
         }
         ~HashMap();
-        Node* insert(int num);
+        Node* insert(int num, Node* temp = nullptr);
         Node* find(int num);
         int getSize();
         int getNumObjects();
 };
-class MyFailure : public std::exception {
-public:
-    const char* what() const noexcept override {
-        return "MyFailure";
-    }
-};
+
 
 
 
