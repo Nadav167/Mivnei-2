@@ -1,0 +1,56 @@
+addGenre: INVALID_INPUT
+addGenre: SUCCESS
+addGenre: SUCCESS
+addGenre: SUCCESS
+addGenre: SUCCESS
+mergeGenres: SUCCESS
+addSong: SUCCESS
+mergeGenres: SUCCESS
+mergeGenres: SUCCESS
+addGenre: SUCCESS
+addSong: SUCCESS
+addGenre: SUCCESS
+mergeGenres: SUCCESS
+getSongGenre: SUCCESS, 9755
+getNumberOfSongsByGenre: SUCCESS, 0
+addSong: SUCCESS
+getSongGenre: SUCCESS, 9755
+addGenre: SUCCESS
+addGenre: SUCCESS
+addSong: SUCCESS
+addGenre: INVALID_INPUT
+getNumberOfGenreChanges: SUCCESS, 0
+getNumberOfSongsByGenre: SUCCESS, 0
+addSong: SUCCESS
+addGenre: SUCCESS
+addGenre: SUCCESS
+addSong: SUCCESS
+getSongGenre: SUCCESS, 9755
+addGenre: SUCCESS
+addGenre: SUCCESS
+addGenre: SUCCESS
+addGenre: SUCCESS
+addGenre: SUCCESS
+addGenre: SUCCESS
+mergeGenres: SUCCESS
+getSongGenre: SUCCESS, 9755
+getSongGenre: SUCCESS, 9755
+addGenre: SUCCESS
+mergeGenres: SUCCESS
+getSongGenre: SUCCESS, 7140
+addGenre: INVALID_INPUT
+addGenre: SUCCESS
+addSong: SUCCESS
+getNumberOfSongsByGenre: SUCCESS, 0
+mergeGenres: SUCCESS
+mergeGenres: SUCCESS
+getNumberOfGenreChanges: SUCCESS, 0
+getSongGenre: SUCCESS, 12112
+addGenre: SUCCESS
+addGenre: SUCCESS
+addSong: SUCCESS
+getNumberOfGenreChanges: SUCCESS, 0
+mergeGenres: SUCCESS
+addGenre: SUCCESS
+addGenre: SUCCESS
+addGenre: SUCCESS
